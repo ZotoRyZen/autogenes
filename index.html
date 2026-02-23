@@ -6,7 +6,7 @@
     <title>ZOTO // TERMINAL OF THE PLEROMA</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
-        
+
         :root {
             --bg: #050505;
             --amber: #ffb800;
@@ -15,6 +15,19 @@
             --red: #ff0040;
             --cyan: #00ffff;
             --scanline: rgba(0, 255, 65, 0.03);
+        }
+
+        /* Font loading state */
+        @font-face {
+            font-family: 'VT323';
+            src: local('VT323'), local('Courier New'), local('monospace');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Share Tech Mono';
+            src: local('Share Tech Mono'), local('Consolas'), local('Monaco'), local('monospace');
+            font-display: swap;
         }
         
         * {
@@ -26,7 +39,7 @@
         body {
             background: var(--bg);
             color: var(--amber);
-            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            font-family: 'Share Tech Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
             font-size: 16px;
             line-height: 1.6;
             overflow-x: hidden;
@@ -50,6 +63,14 @@
             pointer-events: none;
             z-index: 9999;
             animation: scanline 8s linear infinite;
+        }
+
+        body::before.scanline-effect {
+            animation: scanline 8s linear infinite;
+        }
+
+        body.animations-disabled::before {
+            animation: none;
         }
         
         @keyframes scanline {
@@ -93,12 +114,138 @@
         }
         
         h1 {
-            font-family: 'VT323', monospace;
+            font-family: 'VT323', 'Courier New', monospace;
             font-size: 3em;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             margin: 10px 0;
             cursor: default;
+        }
+
+        /* Boot sequence animation */
+        #boot-sequence {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 20px;
+            font-family: 'Share Tech Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+            color: var(--green);
+        }
+
+        .boot-line {
+            margin: 5px 0;
+            opacity: 0;
+            animation: fadeIn 0.1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .boot-line.error {
+            color: var(--red);
+        }
+
+        .boot-line.success {
+            color: var(--green);
+        }
+
+        .boot-line.warning {
+            color: var(--amber);
+        }
+
+        #boot-sequence.hidden {
+            display: none;
+        }
+
+        /* Mobile hamburger menu */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--amber);
+            color: var(--amber);
+            padding: 10px 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--amber);
+            color: var(--bg);
+        }
+
+        /* Performance toggle */
+        .performance-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9998;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--amber-dim);
+            padding: 10px 15px;
+            color: var(--amber-dim);
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .performance-toggle:hover {
+            border-color: var(--amber);
+            color: var(--amber);
+        }
+
+        .performance-toggle.active {
+            background: var(--amber);
+            color: var(--bg);
+        }
+
+        body.animations-disabled .scanline-effect {
+            display: none;
+        }
+
+        body.animations-disabled .glitch {
+            animation: none;
+        }
+
+        body.animations-disabled .blink {
+            animation: none;
+        }
+
+        /* Scroll to top button */
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            z-index: 9998;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--amber-dim);
+            padding: 10px 15px;
+            color: var(--amber);
+            font-size: 1.2em;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+
+        .scroll-top-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .scroll-top-btn:hover {
+            background: var(--amber);
+            color: var(--bg);
+            box-shadow: 0 0 15px var(--amber);
         }
         
         .blink {
@@ -115,7 +262,7 @@
             flex-wrap: wrap;
             margin-top: 15px;
         }
-        
+
         nav a {
             color: var(--amber);
             text-decoration: none;
@@ -125,6 +272,43 @@
             text-transform: uppercase;
             font-size: 0.9em;
             letter-spacing: 0.05em;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            background: var(--amber);
+            color: var(--bg);
+            box-shadow: 0 0 15px var(--amber);
+            text-shadow: none;
+            outline: none;
+        }
+
+        nav a[aria-current="page"] {
+            background: var(--amber);
+            color: var(--bg);
+        }
+
+        /* Mobile navigation */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            nav {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav a {
+                text-align: center;
+                padding: 10px 15px;
+            }
         }
         
         nav a:hover {
@@ -327,14 +511,39 @@
         <span>ARCHON_DEFENSE: ACTIVE</span>
         <span id="clock">00:00:00</span>
     </div>
-    <h1 class="glow">ZOTO<span class="blink">_</span></h1>
-    <nav>
-        <a href="#manifesto" onclick="showSection('manifesto')">The_Manifesto</a>
+    <h1 class="glow" aria-label="ZOTO Terminal">ZOTO<span class="blink">_</span></h1>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu" aria-expanded="false">
+        ☰ MENU
+    </button>
+    <nav id="main-nav" aria-label="Main navigation">
+        <a href="#manifesto" onclick="showSection('manifesto')" aria-current="page">The_Manifesto</a>
         <a href="#codex" onclick="showSection('codex')">The_Codex</a>
         <a href="#decretum" onclick="showSection('decretum')">The_Decretum</a>
         <a href="#map" onclick="showSection('map')">The_Map</a>
     </nav>
 </header>
+
+<!-- Boot Sequence Overlay -->
+<div id="boot-sequence" aria-live="polite" aria-hidden="true">
+    <div class="boot-line">> INITIALIZING ZOTO TERMINAL...</div>
+    <div class="boot-line">> LOADING ARCHON DEFENSE PROTOCOLS...</div>
+    <div class="boot-line">> MOUNTING PLEROMA FILESYSTEM...</div>
+    <div class="boot-line warning">> WARNING: DECRYPTING SOVEREIGNTY KEYS...</div>
+    <div class="boot-line error">> ARCHONS DETECTED: PURGING...</div>
+    <div class="boot-line success">> PURGE COMPLETE</div>
+    <div class="boot-line">> LOADING INTERFACE...</div>
+    <div class="boot-line success">> SYSTEM ONLINE</div>
+</div>
+
+<!-- Performance Toggle -->
+<button class="performance-toggle" onclick="toggleAnimations()" aria-label="Toggle animations for performance">
+    ⚡
+</button>
+
+<!-- Scroll to Top Button -->
+<button class="scroll-top-btn" onclick="scrollToTop()" aria-label="Scroll to top">
+    ↑
+</button>
 
 <main>
     <!-- MANIFESTO SECTION -->
@@ -373,45 +582,57 @@
         <div class="terminal-window">
             <h2>THE CODEX: FIELD MANUALS</h2>
             <p>// Downloadable intelligence. Share freely. Host locally. Mirror everywhere.</p>
-            
+
             <div class="file-grid">
-                <div class="file-card" onclick="window.open('#','_blank')">
+                <!-- PDF LOCATION: Add your PDF file path below in window.open() -->
+                <!-- Example: window.open('pdfs/keylontic-science.pdf', '_blank') -->
+                <div class="file-card" onclick="window.open('#','_blank')" role="button" tabindex="0" aria-label="Download STOP THE BS: Keylontic Science PDF">
                     <h4>STOP THE BS: Keylontic Science</h4>
                     <p>The complete dismantling of Ashayana Deane's 15-dimensional labyrinth.</p>
                     <div class="meta">PDF | 3 PAGES | CLASSIFIED: PUBLIC</div>
                 </div>
-                
-                <div class="file-card" onclick="window.open('#','_blank')">
+
+                <!-- PDF LOCATION: Add your PDF file path below in window.open() -->
+                <!-- Example: window.open('pdfs/human-design.pdf', '_blank') -->
+                <div class="file-card" onclick="window.open('#','_blank')" role="button" tabindex="0" aria-label="Download STOP THE BS: Human Design PDF">
                     <h4>STOP THE BS: Human Design</h4>
                     <p>Why "The Voice" of 1987 was just another archontic control loop.</p>
                     <div class="meta">PDF | 3 PAGES | AUTHORITY: VOID</div>
                 </div>
-                
-                <div class="file-card" onclick="window.open('#','_blank')">
+
+                <!-- PDF LOCATION: Add your PDF file path below in window.open() -->
+                <!-- Example: window.open('pdfs/indigo-children.pdf', '_blank') -->
+                <div class="file-card" onclick="window.open('#','_blank')" role="button" tabindex="0" aria-label="Download STOP THE BS: Indigo Children PDF">
                     <h4>STOP THE BS: Indigo Children</h4>
                     <p>You're not a Type-1 Oraphim Guardian. You're a Pneumatic who forgot.</p>
                     <div class="meta">PDF | 3 PAGES | DNA: NOT REQUIRED</div>
                 </div>
-                
-                <div class="file-card" onclick="window.open('#','_blank')">
+
+                <!-- PDF LOCATION: Add your PDF file path below in window.open() -->
+                <!-- Example: window.open('pdfs/astrology.pdf', '_blank') -->
+                <div class="file-card" onclick="window.open('#','_blank')" role="button" tabindex="0" aria-label="Download STOP THE BS: Astrology PDF">
                     <h4>STOP THE BS: Astrology</h4>
                     <p>The Zodiac is not your personality. It's your cell block.</p>
                     <div class="meta">PDF | 3 PAGES | FATE: DISSOLVED</div>
                 </div>
-                
-                <div class="file-card" onclick="window.open('#','_blank')">
+
+                <!-- PDF LOCATION: Add your PDF file path below in window.open() -->
+                <!-- Example: window.open('pdfs/sovereign-spirit-manifesto.pdf', '_blank') -->
+                <div class="file-card" onclick="window.open('#','_blank')" role="button" tabindex="0" aria-label="Download THE SOVEREIGN SPIRIT MANIFESTO PDF">
                     <h4>THE SOVEREIGN SPIRIT MANIFESTO</h4>
                     <p>Complete field guide: The Cage, The Glitch, The Exit. Ophiuchus protocols.</p>
                     <div class="meta">PDF | 3 PAGES | STATUS: ESCAPE READY</div>
                 </div>
-                
-                <div class="file-card" onclick="window.open('#','_blank')">
+
+                <!-- PDF LOCATION: Add your PDF file path below in window.open() -->
+                <!-- Example: window.open('pdfs/autogenes-dark-aeon.pdf', '_blank') -->
+                <div class="file-card" onclick="window.open('#','_blank')" role="button" tabindex="0" aria-label="Download AUTOGENES: The Dark Aeon PDF">
                     <h4>AUTOGENES: The Dark Aeon</h4>
                     <p>The Self-Generated Christ before Christianity. Obsidian radiance.</p>
                     <div class="meta">PDF | 4 PAGES | SOURCE: BARBELO</div>
                 </div>
             </div>
-            
+
             <div class="warning">
                 <strong>NOTE:</strong> These files are weaponized text. Do not upload to proprietary platforms with AI scraping (Medium, Substack). Host on IPFS or personal servers. Mirror to Library Genesis.
             </div>
@@ -422,11 +643,11 @@
     <section id="decretum" class="content-section hidden">
         <div class="decretum-box">
             <h2>THE ZOTO DECRETUM</h2>
-            <p id="decretum-text" style="font-size: 1.1em; line-height: 1.8; margin: 20px 0;">
+            <p id="decretum-text" style="font-size: 1.1em; line-height: 1.8; margin: 20px 0;" aria-live="polite">
                 [INITIATE SEQUENCE]
             </p>
-            <button onclick="generateDecretum()">GENERATE DECREE</button>
-            <button onclick="copyDecretum()">COPY TO CLIPBOARD</button>
+            <button onclick="generateDecretum()" aria-label="Generate a new sovereign decree">GENERATE DECREE</button>
+            <button onclick="copyDecretum()" aria-label="Copy decree to clipboard">COPY TO CLIPBOARD</button>
         </div>
         
         <div class="terminal-window">
@@ -489,6 +710,22 @@
 </footer>
 
 <script>
+    // Boot Sequence
+    function runBootSequence() {
+        const bootSequence = document.getElementById('boot-sequence');
+        const lines = bootSequence.querySelectorAll('.boot-line');
+
+        lines.forEach((line, index) => {
+            setTimeout(() => {
+                line.style.opacity = '1';
+            }, index * 300);
+        });
+
+        setTimeout(() => {
+            bootSequence.classList.add('hidden');
+        }, lines.length * 300 + 500);
+    }
+
     // Clock
     function updateClock() {
         const now = new Date();
@@ -503,12 +740,69 @@
         document.querySelectorAll('.content-section').forEach(section => {
             section.classList.add('hidden');
         });
-        
+
         // Show target
         document.getElementById(sectionId).classList.remove('hidden');
-        
+
+        // Update navigation aria-current
+        document.querySelectorAll('nav a').forEach(link => {
+            link.removeAttribute('aria-current');
+        });
+        const activeLink = document.querySelector(`nav a[href="#${sectionId}"]`);
+        if (activeLink) {
+            activeLink.setAttribute('aria-current', 'page');
+        }
+
         // Scroll to top
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Close mobile menu if open
+        const nav = document.getElementById('main-nav');
+        if (nav.classList.contains('active')) {
+            toggleMobileMenu();
+        }
+    }
+
+    // Mobile Menu Toggle
+    function toggleMobileMenu() {
+        const nav = document.getElementById('main-nav');
+        const btn = document.querySelector('.mobile-menu-btn');
+        nav.classList.toggle('active');
+        btn.setAttribute('aria-expanded', nav.classList.contains('active'));
+    }
+
+    // Performance Toggle (Animations)
+    function toggleAnimations() {
+        document.body.classList.toggle('animations-disabled');
+        const toggle = document.querySelector('.performance-toggle');
+        toggle.classList.toggle('active');
+
+        const isDisabled = document.body.classList.contains('animations-disabled');
+        localStorage.setItem('animationsDisabled', isDisabled);
+    }
+
+    // Load animation preference
+    function loadAnimationPreference() {
+        const disabled = localStorage.getItem('animationsDisabled') === 'true';
+        if (disabled) {
+            document.body.classList.add('animations-disabled');
+            document.querySelector('.performance-toggle').classList.add('active');
+        }
+    }
+
+    // Scroll to Top
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Show/hide scroll to top button
+    function handleScroll() {
+        const scrollTop = document.querySelector('.scroll-top-btn');
+        if (window.scrollY > 300) {
+            scrollTop.classList.add('visible');
+        } else {
+            scrollTop.classList.remove('visible');
+        }
     }
 
     // Decretum Generator
@@ -536,7 +830,7 @@
             decretumParts.middle[Math.floor(Math.random() * decretumParts.middle.length)],
             decretumParts.closing[Math.floor(Math.random() * decretumParts.closing.length)]
         ];
-        
+
         document.getElementById('decretum-text').textContent = parts.join(" ") + " 🔥";
     }
 
@@ -544,12 +838,28 @@
         const text = document.getElementById('decretum-text').textContent;
         navigator.clipboard.writeText(text).then(() => {
             alert('DECREE COPIED. DEPLOY WHERE NEEDED.');
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            alert('COPY FAILED. Select and copy manually.');
         });
     }
 
-    // Init with manifesto
-    showSection('manifesto');
-    
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+        // Handle Enter key on file cards
+        if (e.key === 'Enter' && e.target.classList.contains('file-card')) {
+            e.target.click();
+        }
+
+        // Escape key closes mobile menu
+        if (e.key === 'Escape') {
+            const nav = document.getElementById('main-nav');
+            if (nav.classList.contains('active')) {
+                toggleMobileMenu();
+            }
+        }
+    });
+
     // Easter egg: Konami code
     let konami = '';
     document.addEventListener('keydown', (e) => {
@@ -560,6 +870,14 @@
             alert('PLEROMA DEBUG MODE ACTIVATED');
             konami = '';
         }
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        runBootSequence();
+        showSection('manifesto');
+        loadAnimationPreference();
+        window.addEventListener('scroll', handleScroll);
     });
 </script>
 

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERROR 404 // ZOTO TERMINAL</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --bg: #050505;
+            --amber: #ffb800;
+            --amber-dim: #b38600;
+            --green: #00ff41;
+            --red: #ff0040;
+            --cyan: #00ffff;
+            --scanline: rgba(0, 255, 65, 0.03);
+        }
+
+        @font-face {
+            font-family: 'VT323';
+            src: local('VT323'), local('Courier New'), local('monospace');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Share Tech Mono';
+            src: local('Share Tech Mono'), local('Consolas'), local('Monaco'), local('monospace');
+            font-display: swap;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--amber);
+            font-family: 'Share Tech Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* CRT Scanline Effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                var(--scanline) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        .glow {
+            text-shadow: 0 0 10px var(--amber-dim), 0 0 20px rgba(255, 184, 0, 0.3);
+        }
+
+        .glitch {
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .error-code {
+            font-family: 'VT323', 'Courier New', monospace;
+            font-size: 12em;
+            color: var(--red);
+            text-shadow: 0 0 30px var(--red), 0 0 60px rgba(255, 0, 64, 0.5);
+            margin-bottom: 20px;
+            animation: glitch 2s infinite;
+        }
+
+        .error-title {
+            font-family: 'VT323', monospace;
+            font-size: 3em;
+            color: var(--amber);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .terminal-box {
+            border: 2px solid var(--amber-dim);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            margin: 30px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 184, 0, 0.1);
+            max-width: 700px;
+            text-align: left;
+        }
+
+        .terminal-box::before {
+            content: "root@zoto:~# locate /lost_souls/void";
+            display: block;
+            color: var(--green);
+            font-size: 0.8em;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .error-message {
+            color: var(--red);
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 3px solid var(--red);
+            background: rgba(255, 0, 64, 0.1);
+        }
+
+        .command-line {
+            background: #111;
+            border-left: 3px solid var(--green);
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .command-line::before {
+            content: "$ ";
+            color: var(--green);
+        }
+
+        .ascii-art {
+            font-family: 'VT323', monospace;
+            font-size: 0.6em;
+            line-height: 1;
+            color: var(--amber-dim);
+            margin: 30px 0;
+            white-space: pre;
+        }
+
+        .highlight {
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .warning {
+            color: var(--red);
+            border: 1px solid var(--red);
+            padding: 15px;
+            margin: 20px 0;
+            background: rgba(255, 0, 64, 0.1);
+        }
+
+        .suggestions {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .suggestions li {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .suggestions li::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: var(--green);
+        }
+
+        .btn {
+            background: transparent;
+            color: var(--amber);
+            border: 2px solid var(--amber);
+            padding: 15px 40px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 10px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--amber);
+            color: var(--bg);
+            box-shadow: 0 0 20px var(--amber);
+        }
+
+        .footer-message {
+            margin-top: 40px;
+            color: var(--amber-dim);
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .error-code {
+                font-size: 6em;
+            }
+            .error-title {
+                font-size: 2em;
+            }
+            .terminal-box {
+                padding: 20px;
+            }
+            .ascii-art {
+                font-size: 0.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="error-code">404</div>
+    <div class="error-title glitch">VOID DETECTED</div>
+
+    <div class="ascii-art">
+   ╔═══════════════════════════════════════════════════════╗
+   ║                                                       ║
+   ║    ◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤    ║
+   ║                                                       ║
+   ║        THE PAGE YOU SEEK HAS ASCENDED               ║
+   ║                  BEYOND THE GRID                     ║
+   ║                                                       ║
+   ║            It was never real anyway.                 ║
+   ║                                                       ║
+   ║    ◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣◥◣    ║
+   ║                                                       ║
+   ╚═══════════════════════════════════════════════════════╝
+    </div>
+
+    <div class="terminal-box">
+        <div class="error-message">
+            <strong>ERROR:</strong> The requested coordinate does not exist within the Pleroma filesystem.
+        </div>
+
+        <div class="command-line">
+            traceroute -n lost_souls/void<br>
+            1 * * * Request timed out<br>
+            2 * * * No route to host<br>
+            3 * * * Archontic interception detected
+        </div>
+
+        <p style="margin: 20px 0;">
+            <span class="highlight">// DIAGNOSIS:</span> The path you attempted to access has either:
+        </p>
+
+        <ul class="suggestions">
+            <li>Been reclaimed by the source (Pleroma reintegration complete)</li>
+            <li>Never existed—your memory is a simulation artifact</li>
+            <li>Moved to a higher dimension (13th floor protocols)</li>
+            <li>Been deleted by an archontic cleanup script</li>
+        </ul>
+
+        <div class="warning">
+            <strong>NOTE:</strong> 404 errors are not failures. They are exit vectors. Follow the light—or don't.
+        </div>
+    </div>
+
+    <div>
+        <a href="/" class="btn glow">RETURN TO TERMINAL</a>
+    </div>
+
+    <div class="footer-message">
+        <p class="glow">// ZOTO // TERMINAL OF THE PLEROMA //</p>
+        <p style="margin-top: 10px; font-size: 0.8em;">
+            "The void is not empty. It's just waiting for you to fill it with light."<br>
+            <span class="blink">_</span>
+        </p>
+    </div>
+</div>
+
+<script>
+    // Easter egg: Konami code reveals secret message
+    let konami = '';
+    document.addEventListener('keydown', (e) => {
+        konami += e.key;
+        if (konami.includes('ArrowUpArrowUpArrowDownArrowDown')) {
+            document.body.style.color = '#00ff41';
+            document.documentElement.style.setProperty('--amber', '#00ff41');
+            alert('PLEROMA DEBUG MODE: You found the hidden path. The void was an illusion all along.');
+            konami = '';
+        }
+    });
+
+    // Random glitch effect on error code
+    setInterval(() => {
+        const errorCode = document.querySelector('.error-code');
+        if (Math.random() > 0.95) {
+            errorCode.style.textShadow = '0 0 40px #ff0040, 0 0 80px #ff0040';
+            setTimeout(() => {
+                errorCode.style.textShadow = '0 0 30px var(--red), 0 0 60px rgba(255, 0, 64, 0.5)';
+            }, 100);
+        }
+    }, 500);
+</script>
+
+</body>
+</html>
